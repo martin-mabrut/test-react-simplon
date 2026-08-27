@@ -18,13 +18,14 @@ function App() {
         setInput(values);
         }
       }
-      onClick={createCard}>
+      >
       </input>
-
-      <h1>{input}</h1>
+      <button onClick={createCard}>Valider</button>
 
       <div>
-        
+          {cards.map((card) => (
+            <p key={card}>{card}</p>
+          ))}
       </div>
       </div>
   )

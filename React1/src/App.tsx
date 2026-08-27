@@ -6,6 +6,7 @@ function App() {
   const [cards, setCards] = useState<string[]>([]);
   const [editValue, setEditValue] = useState("");
   const [editingCard, setEditingCard] = useState<string | null>(null);
+  const [cardsDone, setCardsDone] = useState<string[]>([]);
 
   function createCard() {
     const newCardsArray: string[] = [...cards, input];
@@ -22,6 +23,16 @@ function App() {
     setCards(newCardsArray);
   }
 
+  function done (card: string, event: React.ChangeEvent<HTMLInputElement>) {
+    const isChecked = event.target.checked
+    if (isChecked) { 
+      setCardsDone([...cardsDone, card]);
+    } else {
+      const newCardsDone = cardsDone.filter((element) => element!== card)
+      setCardsDone(newCardsDone);
+    }
+  }
+
   return (
     <div>
       <input onChange={(event) => {
@@ -35,9 +46,10 @@ function App() {
 
       <div>
           {cards.map((card) => (
-            <div key={card}>
-              <input type="checkbox"></input>
-              <p>{card}</p>
+            <div key={card} className='border'>
+              <input type="checkbox" onChange={(event) => done(card, event)}></input>
+              <p className={` border ${cardsDone.includes(card) ?
+              "line-through" : ""}`}>{card}</p>
               <button onClick={() => deleteCard(card)} className='border'>delete</button>
               <input onChange={(event) => {
                 const value = event.target.value;

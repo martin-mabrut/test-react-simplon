@@ -15,6 +15,11 @@ function App() {
     setCards(newCardsArray);
   }
 
+  function updateCard(oldText: string, newText: string) {
+    const newCardsArray: string[] = cards.map((card) => card === oldText ? newText : card);
+    setCards(newCardsArray);
+  }
+
   return (
     <div>
       <input onChange={(event) => {

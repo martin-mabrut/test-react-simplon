@@ -10,11 +10,15 @@ function App() {
     setCards(newCardsArray)
   }
 
+  function deleteCard(text: string) {
+    const newCardsArray: string[] = cards.filter((card) => card!== text);
+    setCards(newCardsArray);
+  }
 
   return (
     <div>
-      <input onChange={(input) => {
-        const values = input.target.value;
+      <input onChange={(event) => {
+        const values = event.target.value;
         setInput(values);
         }
       }
@@ -24,8 +28,13 @@ function App() {
 
       <div>
           {cards.map((card) => (
-            <p key={card}>{card}</p>
+            <div key={card}>
+              <p>{card}</p>
+              <button onClick={() => deleteCard(card)}>delete</button>
+            </div>
           ))}
+
+          
       </div>
       </div>
   )

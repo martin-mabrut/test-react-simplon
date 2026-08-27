@@ -2,14 +2,22 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
+
+  interface Task {
+    id: number,
+    text: string
+  }
+
   const [input, setInput] = useState("");
-  const [cards, setCards] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [editValue, setEditValue] = useState("");
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [cardsDone, setCardsDone] = useState<string[]>([]);
 
+  const compteurId = useRef(1); 
+
   function createCard() {
-    const newCardsArray: string[] = [...cards, input];
+    const newCardsArray: Task[] = [...tasks, input];
     setCards(newCardsArray)
   }
 

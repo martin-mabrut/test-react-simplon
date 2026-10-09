@@ -48,30 +48,34 @@ function App() {
   }
 
   return (
-    <div>
-      <input onChange={(event) => {
-        const value = event.target.value;
-        setInput(value);
+    <div className='max-w-xl mx-auto p-6'>
+      <div className='flex gap-2 mb-4'>
+        <input onChange={(event) => {
+          const value = event.target.value;
+          setInput(value);
+          }
         }
-      }
-      className='border'>
-      </input>
-      <button onClick={createTask} className='border'>Valider</button>
+        className='border rounded px-2 py-1 flex-1'>
+        </input>
+        <button onClick={createTask} className='border rounded px-3 py-1'>Valider</button>
+      </div>
 
-      <div>
+      <div className='flex flex-col gap-2'>
           {tasks.map((task) => (
-            <div key={task.id} className='border'>
+            <div key={task.id} className='border rounded p-2 flex flex-wrap items-center gap-2'>
               <input type="checkbox" onChange={(event) => done(task.id, event)}></input>
-              <p className={` border ${tasksDone.includes(task.id) ?
+              <p className={`flex-1 text-left ${tasksDone.includes(task.id) ?
               "line-through" : ""}`}>{task.text}</p>
-              <button onClick={() => deleteTask(task.id)} className='border'>delete</button>
-              <input onChange={(event) => {
-                const value = event.target.value;
-                setEditValue(value);
-              }}
-              className={` border ${task.id === editingTask ? "flex" : "hidden"}`}></input>
-              <button onClick={() => setEditingTask(task.id)} className='border'>modifier</button>
-              <button onClick={() => updateTask(task.id, editValue)} className='border'>enregistrer</button>
+              <button onClick={() => deleteTask(task.id)} className='border rounded px-2'>delete</button>
+              <button onClick={() => setEditingTask(task.id)} className='border rounded px-2'>modifier</button>
+              <div className={`w-full gap-2 ${task.id === editingTask ? "flex" : "hidden"}`}>
+                <input onChange={(event) => {
+                  const value = event.target.value;
+                  setEditValue(value);
+                }}
+                className='border rounded px-2 flex-1'></input>
+                <button onClick={() => updateTask(task.id, editValue)} className='border rounded px-2'>enregistrer</button>
+              </div>
             </div>
           ))}
 

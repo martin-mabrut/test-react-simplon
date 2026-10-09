@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -11,33 +11,39 @@ function App() {
   const [input, setInput] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editValue, setEditValue] = useState("");
-  const [editingCard, setEditingCard] = useState<string | null>(null);
-  const [cardsDone, setCardsDone] = useState<string[]>([]);
+  const [editingTask, setEditingTask] = useState<number | null>(null);
+  const [tasksDone, setTasksDone] = useState<number[]>([]);
 
   const compteurId = useRef(1); 
 
-  function createCard() {
-    const newCardsArray: Task[] = [...tasks, input];
-    setCards(newCardsArray)
+  function createTask() {
+
+    const newTask: Task = { id: compteurId.current, text: input }
+
+    compteurId.current++;
+
+    const newTasksArray: Task[] = [...tasks, newTask];
+    setTasks(newTasksArray)
   }
 
-  function deleteCard(text: string) {
-    const newCardsArray: string[] = cards.filter((card) => card!== text);
-    setCards(newCardsArray);
+  function deleteTask(id: number) {
+    const newTasksArray: Task[] = tasks.filter((task) => task.id !== id );
+    setTasks(newTasksArray);
   }
 
-  function updateCard(oldText: string, newText: string) {
-    const newCardsArray: string[] = cards.map((card) => card === oldText ? newText : card);
-    setCards(newCardsArray);
+  function updateTask(id: number, newText: string) {
+    const newTasksArray: Task[] = tasks.map((task) => task.id === id ? {...task, text: newText} : task);
+    setTasks(newTasksArray);
+    setEditingTask(null);
   }
 
-  function done (card: string, event: React.ChangeEvent<HTMLInputElement>) {
+  function done (id: number, event: React.ChangeEvent<HTMLInputElement>) {
     const isChecked = event.target.checked
     if (isChecked) { 
-      setCardsDone([...cardsDone, card]);
+      setTasksDone([...tasksDone, id]);
     } else {
-      const newCardsDone = cardsDone.filter((element) => element!== card)
-      setCardsDone(newCardsDone);
+      const newTasksDone = tasksDone.filter((element) => element!== id)
+      setTasksDone(newTasksDone);
     }
   }
 
@@ -50,22 +56,22 @@ function App() {
       }
       className='border'>
       </input>
-      <button onClick={createCard} className='border'>Valider</button>
+      <button onClick={createTask} className='border'>Valider</button>
 
       <div>
-          {cards.map((card) => (
-            <div key={card} className='border'>
-              <input type="checkbox" onChange={(event) => done(card, event)}></input>
-              <p className={` border ${cardsDone.includes(card) ?
-              "line-through" : ""}`}>{card}</p>
-              <button onClick={() => deleteCard(card)} className='border'>delete</button>
+          {tasks.map((task) => (
+            <div key={task.id} className='border'>
+              <input type="checkbox" onChange={(event) => done(task.id, event)}></input>
+              <p className={` border ${tasksDone.includes(task.id) ?
+              "line-through" : ""}`}>{task.text}</p>
+              <button onClick={() => deleteTask(task.id)} className='border'>delete</button>
               <input onChange={(event) => {
                 const value = event.target.value;
                 setEditValue(value);
               }}
-              className={` border ${card === editingCard ? "flex" : "hidden"}`}></input>
-              <button onClick={() => setEditingCard(card)} className='border'>modifier</button>
-              <button onClick={() => updateCard(card, editValue)} className='border'>enregistrer</button>
+              className={` border ${task.id === editingTask ? "flex" : "hidden"}`}></input>
+              <button onClick={() => setEditingTask(task.id)} className='border'>modifier</button>
+              <button onClick={() => updateTask(task.id, editValue)} className='border'>enregistrer</button>
             </div>
           ))}
 
